@@ -47,13 +47,15 @@ mediasB = []
 desviosB = []
 
 funcao = HS
+iteracoes = 10000
+tamanho = 1000
 for _, nome in enumerate(arquivos_na_pasta):
     imagem = cv2.imread(nome)
     r = imagem[:,:,2]
     g = imagem[:,:,1]
     b = imagem[:,:,0]
     print(nome)
-    x, std = media_quadrados(r, iteracoes, tamanho,funcao)
+    x, std = quadrados_media_std(r, iteracoes, tamanho,funcao)
     print('media  = %.2f' % x)
     nomesR.append(nome[:-4] + '_' + 'r') # ignoro o .jpg
     # fica do jeito recorte_leite_00_r
@@ -61,14 +63,14 @@ for _, nome in enumerate(arquivos_na_pasta):
     desviosR.append(std)
     print('')
     
-    x, std = media_quadrados(g, iteracoes, tamanho,funcao)
+    x, std = quadrados_media_std(g, iteracoes, tamanho,funcao)
     print('media  = %.2f' % x)
     nomesG.append(nome[:-4] + '_' + 'g') # ignoro o .jpg
     mediasG.append(x)
     desviosG.append(std)
     print('')
     
-    x, std = media_quadrados(b, iteracoes, tamanho,funcao)
+    x, std = quadrados_media_std(b, iteracoes, tamanho,funcao)
     print('media  = %.2f' % x)
     nomesB.append(nome[:-4] + '_' + 'b') # ignoro o .jpg
     # fica do jeito recorte_leite_00_r

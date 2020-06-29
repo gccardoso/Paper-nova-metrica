@@ -79,7 +79,8 @@ def RMS(imagem):
 
 def quadrados_media_std(imagem, N, tamanho,metrica):
     """
-    Aplica uma certa funcao N quadrados de certo tamanho na imagem selecionada. 
+    Aplica uma certa funcao N vezes, em quadrados de certo tamanho
+    na imagem selecionada. 
     Retorna:
     lista com médias, lista com desvios padrão.
     """
@@ -90,7 +91,13 @@ def quadrados_media_std(imagem, N, tamanho,metrica):
         lista.append(valor)
     return np.mean(lista), np.std(lista)
 
-def weber(imagem):
+def weber(imagem, tamanho=None):
+    
+    # Se eu não especificar nenhum tamanho
+    # pegar o menor eixo (x,y) e rodar na maior parte da imagem
+    if tamanho is None:
+        tamanho = np.min(np.shape(imagem))
+        
     if type(imagem) == str:
         imagem = cv2.imread(imagem,0) 
         
@@ -99,7 +106,7 @@ def weber(imagem):
     denominador = np.min(Back)
     if denominador == 0:
         denominador = 1
-    return (np.max(Fore) - np.min(Back)/denominador)
+    return (np.max(Fore) - np.min(Back))/denominador
 
 def recortar_quadrado(imagem, tamanho):
     """

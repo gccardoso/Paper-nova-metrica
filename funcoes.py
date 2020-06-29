@@ -99,7 +99,7 @@ def weber(imagem):
     denominador = np.min(Back)
     if denominador == 0:
         denominador = 1
-    return (np.max(Fore) - np.min(Back)/denominador)
+    return (np.max(Fore) - np.min(Back))/denominador
 
 def recortar_quadrado(imagem, tamanho):
     """

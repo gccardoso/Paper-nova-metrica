@@ -38,7 +38,13 @@ def HS(imagem):
     valor1 = np.where(normcum == min(normcum, key=lambda x:abs(x-0.25)))[0][0]
     valor2 = np.where(normcum == min(normcum, key=lambda x:abs(x-0.75)))[0][0]
     
-    hs = (valor2 - valor1)/(np.max(imagem_GS)-np.min(imagem_GS))
+    denominador = np.max(imagem_GS)-np.min(imagem_GS)
+    if denominador == 0:
+        denominador = 1
+    
+    
+    hs = (valor2 - valor1)/denominador
+    
     return hs
 
 def michelson(imagem):
@@ -49,6 +55,9 @@ def michelson(imagem):
 #     imagem = cv2.imread(imagem,0)
     numerador = np.max(imagem) - np.min(imagem)
     denominador = np.max(imagem) + np.min(imagem)
+    if denominador == 0:
+        denominador = 1
+    
     return numerador/denominador
     
 def RMS(imagem):
@@ -63,6 +72,8 @@ def RMS(imagem):
     Imed = np.sum(imagem)/LM
     soma1 = (imagem - Imed)**2
     soma2 = np.sum(soma1)
+    
+    
     return np.sqrt(soma2/LM)
 
 
@@ -86,8 +97,10 @@ def weber(imagem,tamanho):
         
     Back = recortar_quadrado(imagem, tamanho)
     Fore = recortar_quadrado(imagem, tamanho)
-    
-    return (np.max(Fore) - np.min(Back)/np.min(Back))
+    denominador = np.min(Back)
+    if denominador == 0:
+        denominador = 0
+    return (np.max(Fore) - np.min(Back)/)
 
 def recortar_quadrado(imagem, tamanho):
     """

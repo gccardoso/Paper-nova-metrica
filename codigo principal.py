@@ -25,3 +25,6 @@ with open('objs.pkl', 'rb') as f:  # Python 3: open(..., 'rb')
     listaImagens,testImg, df, df2, df3 = pickle.load(f)
 with open('df_copia.pkl', 'rb') as f:  # Python 3: open(..., 'rb')
     df_copia = pickle.load(f)
+
+#%%
+

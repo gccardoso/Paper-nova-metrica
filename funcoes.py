@@ -7,7 +7,7 @@ Created on Thu Jun 18 19:40:53 2020
 import cv2
 import numpy as np
 
-def HS(imagem):
+def HS(imagem,tamanho=10000):
     """
     
     Parametros
@@ -47,7 +47,7 @@ def HS(imagem):
     
     return hs
 
-def michelson(imagem):
+def michelson(imagem,tamanho=10000):
     if type(imagem) == str:
         imagem = cv2.imread(imagem,0) 
     elif type(imagem) == np.ndarray:
@@ -60,7 +60,7 @@ def michelson(imagem):
     
     return numerador/denominador
     
-def RMS(imagem):
+def RMS(imagem,tamanho=10000):
     if type(imagem) == str:
         imagem = cv2.imread(imagem,0) 
     elif type(imagem) == np.ndarray:
@@ -81,9 +81,8 @@ def quadrados_media_std(imagem, N, tamanho,metrica):
     """
     Aplica uma certa funcao N quadrados de certo tamanho na imagem selecionada. 
     Retorna:
-    lista com médias, lista com desvios padrão
+    lista com médias, lista com desvios padrão.
     """
-    
     lista = []
     for _ in range(N):
         img_recortada = recortar_quadrado(imagem, tamanho)
@@ -91,7 +90,7 @@ def quadrados_media_std(imagem, N, tamanho,metrica):
         lista.append(valor)
     return np.mean(lista), np.std(lista)
 
-def weber(imagem,tamanho):
+def weber(imagem,tamanho=10000):
     if type(imagem) == str:
         imagem = cv2.imread(imagem,0) 
         
@@ -99,8 +98,8 @@ def weber(imagem,tamanho):
     Fore = recortar_quadrado(imagem, tamanho)
     denominador = np.min(Back)
     if denominador == 0:
-        denominador = 0
-    return (np.max(Fore) - np.min(Back)/)
+        denominador = 1
+    return (np.max(Fore) - np.min(Back)/denominador)
 
 def recortar_quadrado(imagem, tamanho):
     """

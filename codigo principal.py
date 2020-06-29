@@ -46,6 +46,7 @@ nomesB = []
 mediasB = []
 desviosB = []
 
+funcao = HS
 for _, nome in enumerate(arquivos_na_pasta):
     imagem = cv2.imread(nome)
     r = imagem[:,:,2]
@@ -60,14 +61,14 @@ for _, nome in enumerate(arquivos_na_pasta):
     desviosR.append(std)
     print('')
     
-    x, std = media_quadrados(g, iteracoes, tamanho)
+    x, std = media_quadrados(g, iteracoes, tamanho,funcao)
     print('media  = %.2f' % x)
     nomesG.append(nome[:-4] + '_' + 'g') # ignoro o .jpg
     mediasG.append(x)
     desviosG.append(std)
     print('')
     
-    x, std = media_quadrados(b, iteracoes, tamanho)
+    x, std = media_quadrados(b, iteracoes, tamanho,funcao)
     print('media  = %.2f' % x)
     nomesB.append(nome[:-4] + '_' + 'b') # ignoro o .jpg
     # fica do jeito recorte_leite_00_r
@@ -75,11 +76,11 @@ for _, nome in enumerate(arquivos_na_pasta):
     desviosB.append(std)
     print('')
     
-concentracao = []
-for i in nomesR:
-    x = i.split(sep='_')[2]
-    print(int(x))
-    concentracao.append(int(x))
+concentracao = [0,5,10,15,20,25,30,35,99]
+# for i in nomesR:
+#     x = i.split(sep='_')[2]
+#     print(int(x))
+#     concentracao.append(int(x))
 
 dfR = pd.DataFrame({
     "Nomes": nomesR,

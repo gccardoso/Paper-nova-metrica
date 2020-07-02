@@ -36,7 +36,7 @@ iteracoes = 10000
 N = iteracoes
 temp = []
 
-for metrica in [michelson]:
+for metrica in [weber]:
     for file in arquivos_na_pasta:
         file = cv2.imread(file,0)
         valor, std  = quadrados_media_std(file,N,tamanho,metrica)
@@ -49,6 +49,29 @@ for metrica in [michelson]:
     df[metrica.__name__ + '_erro']  = std/100 #std / sqrt(10.000)
 
 
+for metrica in [weber]:
+    valor_lista = []
+    std_lista=[]
+    
+    for file in arquivos_na_pasta:
+        tic = time.time()
+        imagem = cv2.imread(file,0) 
+        valor, std  = quadrados_media_std(imagem,N,tamanho,metrica)
+        toc = time.time()
+        print("\nTempo de execução: ",toc-tic)
+        print("metrica: ", metrica.__name__)
+        print("imagem: ", file)
+        valor_lista.append(valor)
+        std_lista.append(std)
+        
+
+
+    # 2. Salvar dados no dataframe.
+    df[metrica.__name__ + '_valor'] = valor_lista
+    df[metrica.__name__ + '_std']   = std_lista
+
+    # 3. Calcular os erros padrão, coloque também no dataframe.
+    df[metrica.__name__ + '_erro']  = df[metrica.__name__ + '_std']/100 #std / sqrt(10.000)
 #%%
 
 # def aaaa(tamanho, iteracoes,caminho,deletar=True)
@@ -151,5 +174,13 @@ plt.title('Grafico colorido')
 plt.xlabel("Concentracao [ml]")
 plt.ylabel("Media")
 
-#%%
-# pd.to_csv('')
+#%% Normalizando
+
+def normalizador(df):
+    x = df.values
+    return  (x-x.min())/(x.max() - x.min())
+df['Media_R_norm'] = normalizador(df['Media_R'])
+df['Media_G_norm'] = normalizador(df['Media_G'])
+df['Media_B_norm'] = normalizador(df['Media_B'])
+################3 mudar linha ################
+df['Media_norm'] = normalizador(df['weber_valor'])

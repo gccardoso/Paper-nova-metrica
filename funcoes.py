@@ -96,7 +96,7 @@ def weber(imagem, tamanho=None):
     # Se eu não especificar nenhum tamanho
     # pegar o menor eixo (x,y) e rodar na maior parte da imagem
     if tamanho is None:
-        tamanho = np.min(np.shape(imagem))
+        tamanho = int(np.min(np.shape(imagem)) * 0.9)
         
     if type(imagem) == str:
         imagem = cv2.imread(imagem,0) 

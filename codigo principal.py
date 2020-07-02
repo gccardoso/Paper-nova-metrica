@@ -130,25 +130,25 @@ concentracao = [0,5,10,15,20,25,30,35,99]
 #     print(int(x))
 #     concentracao.append(int(x))
 
+#%%
 dfR = pd.DataFrame({
     "Nomes": nomesR,
-    "Potencial dos quadrados": mediasR,
-    "Desvio padrao": desviosR,
+    "Media_R": mediasR,
+    "STD_R": desviosR,
     "Concentracao": concentracao
 })
 dfG = pd.DataFrame({
     "Nomes": nomesG,
-    "Potencial dos quadrados": mediasG,
-    "Desvio padrao": desviosG,
+    "Media_G": mediasG,
+    "STD_G": desviosG,
     "Concentracao": concentracao
 })
 dfB = pd.DataFrame({
     "Nomes": nomesB,
-    "Potencial dos quadrados": mediasB,
-    "Desvio padrao": desviosB,
+    "Media_B": mediasB,
+    "STD_B": desviosB,
     "Concentracao": concentracao
 })
-
 #%%
 df = pd.DataFrame({
     "Nomes": nomesR,
@@ -161,7 +161,8 @@ df = pd.DataFrame({
     "Concentracao": concentracao 
     })
 
-#%%
+#%% Sem normalizar
+
 plt.figure(figsize=(8,6),dpi=80)
 # plt.plot(concentracao,medias,'ko')
 plt.errorbar(df['Concentracao'] * 0.1, df['Media_R'],
@@ -184,3 +185,16 @@ df['Media_G_norm'] = normalizador(df['Media_G'])
 df['Media_B_norm'] = normalizador(df['Media_B'])
 ################3 mudar linha ################
 df['Media_norm'] = normalizador(df['weber_valor'])
+plt.figure(figsize=(8,6),dpi=80)
+# plt.plot(concentracao,medias,'ko')
+plt.errorbar(df['Concentracao'] * 0.1, df['Media_R_norm'],
+             yerr=df['STD_R'] / np.sqrt(iteracoes), fmt='ro',label='R')
+plt.errorbar(df['Concentracao'] * 0.1, df['Media_G_norm'],
+             yerr=df['STD_G'] / np.sqrt(iteracoes), fmt='go',label='G')
+plt.errorbar(df['Concentracao'] * 0.1, df['Media_B_norm'],
+             yerr=df['STD_B'] / np.sqrt(iteracoes), fmt='bo',label='B')
+plt.errorbar(df['Concentracao'] * 0.1, df['Media_norm'],
+             yerr=df['STD_B'] / np.sqrt(iteracoes), fmt='ko',label='K')
+plt.title('Grafico colorido')
+plt.xlabel("Concentracao [ml]")
+plt.ylabel("Media")

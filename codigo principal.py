@@ -8,10 +8,13 @@ Created on Sun Jun 28 23:02:40 2020
 import glob
 import cv2
 import numpy as np
+import pandas as pd
 import pickle
 import time
+import matplotlib.pyplot as plt
 
 from funcoes import *
+
 
 #%%
 arquivos_na_pasta =  glob.glob('Imagens\*.jpg') # modificar caso necessário
@@ -25,6 +28,26 @@ with open('objs.pkl', 'rb') as f:  # Python 3: open(..., 'rb')
     listaImagens,testImg, df, df2, df3 = pickle.load(f)
 with open('df_copia.pkl', 'rb') as f:  # Python 3: open(..., 'rb')
     df_copia = pickle.load(f)
+
+#%% Rodar preto e branco
+
+tamanho = 1000
+iteracoes = 10000
+N = iteracoes
+temp = []
+
+for metrica in [michelson]:
+    for file in arquivos_na_pasta:
+        file = cv2.imread(file,0)
+        valor, std  = quadrados_media_std(file,N,tamanho,metrica)
+
+    # 2. Salvar dados no dataframe.
+    df[metrica.__name__ + '_valor'] = valor
+    df[metrica.__name__ + '_std']   = std
+
+    # 3. Calcular os erros padrão, coloque também no dataframe.
+    df[metrica.__name__ + '_erro']  = std/100 #std / sqrt(10.000)
+
 
 #%%
 
@@ -46,7 +69,7 @@ nomesB = []
 mediasB = []
 desviosB = []
 
-funcao = HS
+funcao = weber
 iteracoes = 10000
 tamanho = 1000
 for _, nome in enumerate(arquivos_na_pasta):

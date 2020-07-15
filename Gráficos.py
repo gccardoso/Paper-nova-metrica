@@ -82,9 +82,28 @@ def normalizar():
     plt.title('Grafico normalizado ' + metrica.__name__)
     plt.xlabel("Concentracao [ml]")
     plt.ylabel("Métrica normalizada")
+    
+def normalizar_gray():
+    def normalizador(df):
+        x = df.values
+        return  (x-x.min())/(x.max() - x.min())
+    ################ mudar linha ################
+    df['Media_norm'] = normalizador(df[metrica.__name__ + '_valor'])
+    plt.figure(figsize=(8,6),dpi=80)
+    # plt.plot(concentracao,medias,'ko')
+    plt.errorbar(df['Concentracao'], df['Media_norm'],
+                  fmt='ko--',label='K')
+    # ################ mudar linha ################
+    # plt.errorbar(df['Concentracao'], df['Media_norm'],
+    #              yerr=df[metrica.__name__ +'_erro'] , fmt='ko',label='K')
+    ################ mudar linha ################
+    plt.title('Escala de cinza normalizado ' + metrica.__name__)
+    plt.xlabel("Concentracao [ml]")
+    plt.ylabel("Métrica normalizada")
 #%%
-metrica = michelson
-df = df_michelson.copy()
+metrica = HS
+df = df_HS.copy()
 # sem_normalizar_erro = True
 # sem_normalizar_std = True
-normalizar()
+# normalizar()
+normalizar_gray()

@@ -2,7 +2,14 @@
 """
 Created on Mon Jul  6 11:21:09 2020
 
-@author: andre_000
+@author André Vitor
+
+Este script gera gráficos
+
+Instruções:
+    Na segunda célula, mudar a métrica e df para a métrica escolhida.
+    Use a função normalizar() para gerar gráficos coloridos,
+    normalizar_gray() para gráfico da escala de cinza.
 """
 
 import glob
@@ -15,18 +22,24 @@ import matplotlib.pyplot as plt
 
 from funcoes import *
 
-#%% Leitura dos dados
 
 df_HS = pd.read_excel('HS.xlsx')
 df_RMS = pd.read_excel('RMS.xlsx')
 df_michelson = pd.read_excel('michelson.xlsx')
 
-#%% Gráficos
-
-
 
 
 def sem_normalizar_erro():
+    """
+    Colorido
+    Com barras de erro
+        divididas pelo erro padrão: std/ sqrt(10_000)
+
+    Returns
+    -------
+    None.
+
+    """
     plt.figure(figsize=(8,6),dpi=80)
     # plt.plot(concentracao,medias,'ko')
     plt.errorbar(df['Concentracao'], df['Media_R'],
@@ -43,6 +56,16 @@ def sem_normalizar_erro():
 
 
 def sem_normalizar_std():
+    """
+    Colorido
+    Com barras de erro
+        divididas pelo desvio padrão
+
+    Returns
+    -------
+    None.
+
+    """
     plt.figure(figsize=(8,6),dpi=80)
     # plt.plot(concentracao,medias,'ko')
     plt.errorbar(df['Concentracao'], df['Media_R'],
@@ -58,6 +81,17 @@ def sem_normalizar_std():
     plt.ylabel("Media")
 
 def normalizar():
+    """
+    Colorido
+    Sem barra de erro
+    Normalizado
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    """
 
     def normalizador(df):
         x = df.values
@@ -84,6 +118,17 @@ def normalizar():
     plt.ylabel("Métrica normalizada")
     
 def normalizar_gray():
+    """
+    Escala de cinza
+    sem barra de erro
+    normalizado
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    """
     def normalizador(df):
         x = df.values
         return  (x-x.min())/(x.max() - x.min())

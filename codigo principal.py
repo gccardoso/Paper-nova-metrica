@@ -149,16 +149,33 @@ df = pd.DataFrame({
     })
 
 #%% Sem normalizar
-
+metrica = HS
 plt.figure(figsize=(8,6),dpi=80)
 # plt.plot(concentracao,medias,'ko')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_R'],
+plt.errorbar(df['Concentracao'], df['Media_R'],
              yerr=df['STD_R'] / np.sqrt(iteracoes), fmt='ro',label='R')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_G'],
+plt.errorbar(df['Concentracao'], df['Media_G'],
              yerr=df['STD_G'] / np.sqrt(iteracoes), fmt='go',label='G')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_B'],
+plt.errorbar(df['Concentracao'], df['Media_B'],
              yerr=df['STD_B'] / np.sqrt(iteracoes), fmt='bo',label='B')
-plt.title('Grafico colorido')
+plt.errorbar(df['Concentracao'], df[metrica.__name__ + '_valor'],
+             yerr=df[metrica.__name__ +'_std' ]/100,fmt='ko')
+plt.title('Grafico colorido HS')
+plt.xlabel("Concentracao [ml]")
+plt.ylabel("Media")
+#%% Sem normalizar
+metrica = HS
+plt.figure(figsize=(8,6),dpi=80)
+# plt.plot(concentracao,medias,'ko')
+plt.errorbar(df['Concentracao'], df['Media_R'],
+             yerr=df['STD_R'] , fmt='ro',label='R')
+plt.errorbar(df['Concentracao'], df['Media_G'],
+             yerr=df['STD_G'], fmt='go',label='G')
+plt.errorbar(df['Concentracao'], df['Media_B'],
+             yerr=df['STD_B'] , fmt='bo',label='B')
+plt.errorbar(df['Concentracao'], df[metrica.__name__ + '_valor'],
+             yerr=df[metrica.__name__ +'_std' ],fmt='ko')
+plt.title('Grafico colorido HS')
 plt.xlabel("Concentracao [ml]")
 plt.ylabel("Media")
 
@@ -187,3 +204,5 @@ plt.errorbar(df['Concentracao'], df['Media_norm'],
 plt.title('Grafico colorido RMS')
 plt.xlabel("Concentracao [ml]")
 plt.ylabel("Métrica normalizada")
+#%% Salvar Excel
+# df.to_excel('michelson.xlsx',index=False)

@@ -30,24 +30,10 @@ with open('df_copia.pkl', 'rb') as f:  # Python 3: open(..., 'rb')
     df_copia = pickle.load(f)
 
 #%% Rodar preto e branco
-
 tamanho = 1000
 iteracoes = 10000
 N = iteracoes
 temp = []
-
-for metrica in [weber]:
-    for file in arquivos_na_pasta:
-        file = cv2.imread(file,0)
-        valor, std  = quadrados_media_std(file,N,tamanho,metrica)
-
-    # 2. Salvar dados no dataframe.
-    df[metrica.__name__ + '_valor'] = valor
-    df[metrica.__name__ + '_std']   = std
-
-    # 3. Calcular os erros padrão, coloque também no dataframe.
-    df[metrica.__name__ + '_erro']  = std/100 #std / sqrt(10.000)
-
 
 for metrica in [weber]:
     valor_lista = []
@@ -61,6 +47,7 @@ for metrica in [weber]:
         print("\nTempo de execução: ",toc-tic)
         print("metrica: ", metrica.__name__)
         print("imagem: ", file)
+        print("Valor: ", valor)
         valor_lista.append(valor)
         std_lista.append(std)
         
@@ -162,16 +149,33 @@ df = pd.DataFrame({
     })
 
 #%% Sem normalizar
-
+metrica = HS
 plt.figure(figsize=(8,6),dpi=80)
 # plt.plot(concentracao,medias,'ko')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_R'],
+plt.errorbar(df['Concentracao'], df['Media_R'],
              yerr=df['STD_R'] / np.sqrt(iteracoes), fmt='ro',label='R')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_G'],
+plt.errorbar(df['Concentracao'], df['Media_G'],
              yerr=df['STD_G'] / np.sqrt(iteracoes), fmt='go',label='G')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_B'],
+plt.errorbar(df['Concentracao'], df['Media_B'],
              yerr=df['STD_B'] / np.sqrt(iteracoes), fmt='bo',label='B')
-plt.title('Grafico colorido')
+plt.errorbar(df['Concentracao'], df[metrica.__name__ + '_valor'],
+             yerr=df[metrica.__name__ +'_std' ]/100,fmt='ko')
+plt.title('Grafico colorido HS')
+plt.xlabel("Concentracao [ml]")
+plt.ylabel("Media")
+#%% Sem normalizar
+metrica = HS
+plt.figure(figsize=(8,6),dpi=80)
+# plt.plot(concentracao,medias,'ko')
+plt.errorbar(df['Concentracao'], df['Media_R'],
+             yerr=df['STD_R'] , fmt='ro',label='R')
+plt.errorbar(df['Concentracao'], df['Media_G'],
+             yerr=df['STD_G'], fmt='go',label='G')
+plt.errorbar(df['Concentracao'], df['Media_B'],
+             yerr=df['STD_B'] , fmt='bo',label='B')
+plt.errorbar(df['Concentracao'], df[metrica.__name__ + '_valor'],
+             yerr=df[metrica.__name__ +'_std' ],fmt='ko')
+plt.title('Grafico colorido HS')
 plt.xlabel("Concentracao [ml]")
 plt.ylabel("Media")
 
@@ -183,18 +187,22 @@ def normalizador(df):
 df['Media_R_norm'] = normalizador(df['Media_R'])
 df['Media_G_norm'] = normalizador(df['Media_G'])
 df['Media_B_norm'] = normalizador(df['Media_B'])
-################3 mudar linha ################
-df['Media_norm'] = normalizador(df['weber_valor'])
+################ mudar linha ################
+df['Media_norm'] = normalizador(df['michelson_valor'])
 plt.figure(figsize=(8,6),dpi=80)
 # plt.plot(concentracao,medias,'ko')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_R_norm'],
+plt.errorbar(df['Concentracao'], df['Media_R_norm'],
              yerr=df['STD_R'] / np.sqrt(iteracoes), fmt='ro',label='R')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_G_norm'],
+plt.errorbar(df['Concentracao'], df['Media_G_norm'],
              yerr=df['STD_G'] / np.sqrt(iteracoes), fmt='go',label='G')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_B_norm'],
+plt.errorbar(df['Concentracao'], df['Media_B_norm'],
              yerr=df['STD_B'] / np.sqrt(iteracoes), fmt='bo',label='B')
-plt.errorbar(df['Concentracao'] * 0.1, df['Media_norm'],
-             yerr=df['STD_B'] / np.sqrt(iteracoes), fmt='ko',label='K')
-plt.title('Grafico colorido')
+################ mudar linha ################
+plt.errorbar(df['Concentracao'], df['Media_norm'],
+             yerr=df['RMS_erro'] / np.sqrt(iteracoes), fmt='ko',label='K')
+################ mudar linha ################
+plt.title('Grafico colorido RMS')
 plt.xlabel("Concentracao [ml]")
-plt.ylabel("Media")
+plt.ylabel("Métrica normalizada")
+#%% Salvar Excel
+# df.to_excel('michelson.xlsx',index=False)
